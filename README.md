@@ -16,7 +16,7 @@ It can be used for many purposes, but the most significant usage would to clean 
 Combining `defer` with `malloc` is a strong memory management strategy that everyone should consider at least once.  
 
 # USAGE
-Copy and paste `defer.h` and `array.h` file, include them, and you'll get simple three macros *(alongside macros in array.h)*, `DEFERRABLE`, `RETURN`, and most importantly, `defer` *(this can be a regular function if you wish)*.  
+Copy and paste `defer.h` and `array.h` file, include them, and you'll get simple three macros *(alongside macros in array.h)*, `DEFERRABLE`, `RETURN`, and most importantly, `defer`.
 
 ![defer example2](example2.png)
 ```
