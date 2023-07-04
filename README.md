@@ -16,7 +16,7 @@ It can be used for many purposes, but the most significant usage would to clean 
 Combining `defer` with `malloc` is a strong memory management strategy that everyone should consider at least once.  
 
 # USAGE
-Copy and paste `defer.h` file, include it, and you'll get simple three macros, `DEFERRABLE`, `RETURN`, and most importantly, `defer` *(this can be a regular function if you wish)*.  
+Copy and paste `defer.h` and `array.h` file, include them, and you'll get simple three macros *(alongside macros in array.h)*, `DEFERRABLE`, `RETURN`, and most importantly, `defer` *(this can be a regular function if you wish)*.  
 
 ![defer example2](example2.png)
 ```
@@ -27,8 +27,3 @@ freed two words
 1) After the function curly brace opening, write `DEFERRABLE`; It declares necessary variables for `defer` to work.
 1) `defer(void(*)(void*), void*)` takes a function pointer, and a pointer that passes onto the same function.
 1) Use `RETURN` instead of the regular `return`; It evaluates the return expression, saves it, executes deffered functions that you've passed, and then return the previously saved return expression.
-
----
-
-If you find `MAX_DEFER_COUNT`'s default value `32` is enough, change it yourself *(of course, going beyond `255` requires you to change `deferred_count`'s type as well)*.
-

@@ -1,41 +1,37 @@
 #ifndef DEFER_H
 #define DEFER_H
 #include <stdlib.h>
-
-#define MAX_DEFER_COUNT 32
+#include "array.h"
 
 typedef void(*fn_t)(void*);
+typedef void* pointer;
 
-#define DEFERRABLE                         \
-fn_t deferred[MAX_DEFER_COUNT];            \
-void* deferred_parameter[MAX_DEFER_COUNT]; \
-unsigned char deferred_count = 0;
+#define DEFERRABLE              \
+declare_array(fn_t);            \
+declare_array(pointer);         \
+Ifn_tI deferred;                \
+IpointerI deferred_parameter;   \
+II__init(deferred, NULL);       \
+II__init(deferred_parameter, NULL);
 
-#define RETURN(result)                                                \
-do {                                                                  \
-	const typeof(result) RESULT = result;                             \
-	while (deferred_count)                                            \
-	{                                                                 \
-		deferred_count--;                                             \
-		deferred[deferred_count](deferred_parameter[deferred_count]); \
-	}                                                                 \
-	return RESULT;                                                    \
+#define RETURN(result)                                                                  \
+do {                                                                                    \
+	const typeof(result) RESULT = result;                                               \
+	size_t deferred_count = deferred.length;                                            \
+	while (deferred_count)                                                              \
+	{                                                                                   \
+		deferred_count--;                                                               \
+		deferred.elements[deferred_count](deferred_parameter.elements[deferred_count]); \
+	}                                                                                   \
+	II__free(deferred);                                                                 \
+	II__free(deferred_parameter);                                                       \
+	return RESULT;                                                                      \
 } while(0)
 
 #define defer(fn, parameter)                          \
 do {                                                  \
-	deferred[deferred_count] = (fn_t)fn;              \
-	deferred_parameter[deferred_count++] = parameter; \
+	II__append(deferred, (fn_t)fn);                   \
+	II__append(deferred_parameter, parameter);        \
 } while(0)
-
-/*
-**  if you prefer functions over macros...
-**
-**  void defer(fn_t fn, void* parameter)
-**  {
-**  	deferred[deferred_count] = fn;
-**  	deferred_parameter[deferred_count++] = parameter;
-**  }
-*/
 
 #endif
